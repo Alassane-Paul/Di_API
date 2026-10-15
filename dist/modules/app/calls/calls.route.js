@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.callsRouter = void 0;
+const express_1 = require("express");
+const controller_helper_1 = require("../../../utils/controller.helper");
+const auth_middleware_1 = require("../../../middlewares/auth.middleware");
+const body_middleware_1 = require("../../../middlewares/body.middleware");
+const calls_service_1 = require("./calls.service");
+const callsRouter = (0, express_1.Router)();
+exports.callsRouter = callsRouter;
+callsRouter.post('/', auth_middleware_1.authenticate, body_middleware_1.bodyMiddleware, (0, controller_helper_1.createController)(null, calls_service_1.initiateCallService, 'InitiateCallController'));
+callsRouter.put('/:callId/status', auth_middleware_1.authenticate, body_middleware_1.bodyMiddleware, (0, controller_helper_1.createController)(null, calls_service_1.updateCallStatusService, 'UpdateCallStatusController'));
+callsRouter.get('/', auth_middleware_1.authenticate, (0, controller_helper_1.createController)(null, calls_service_1.getCallHistoryService, 'GetCallHistoryController'));
+callsRouter.get('/history', auth_middleware_1.authenticate, (0, controller_helper_1.createController)(null, calls_service_1.getCallHistoryService, 'GetCallHistoryController'));
+exports.default = callsRouter;

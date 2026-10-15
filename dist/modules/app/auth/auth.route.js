@@ -1,0 +1,18 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.authRouter = void 0;
+const express_1 = require("express");
+const controller_helper_1 = require("../../../utils/controller.helper");
+const auth_middleware_1 = require("../../../middlewares/auth.middleware");
+const body_middleware_1 = require("../../../middlewares/body.middleware");
+const ratelimit_middleware_1 = require("../../../middlewares/ratelimit.middleware");
+const auth_validator_1 = require("./auth.validator");
+const auth_service_1 = require("./auth.service");
+const authRouter = (0, express_1.Router)();
+exports.authRouter = authRouter;
+authRouter.post('/register', ratelimit_middleware_1.authLimiter, body_middleware_1.bodyMiddleware, (0, controller_helper_1.createController)(auth_validator_1.registerValidator, auth_service_1.registerService, 'RegisterController'));
+authRouter.post('/login', ratelimit_middleware_1.authLimiter, body_middleware_1.bodyMiddleware, (0, controller_helper_1.createController)(auth_validator_1.loginValidator, auth_service_1.loginService, 'LoginController'));
+authRouter.get('/profile', auth_middleware_1.authenticate, (0, controller_helper_1.createController)(null, auth_service_1.getProfileService, 'GetProfileController'));
+authRouter.put('/profile', auth_middleware_1.authenticate, body_middleware_1.bodyMiddleware, (0, controller_helper_1.createController)(null, auth_service_1.updateProfileService, 'UpdateProfileController'));
+authRouter.get('/search', auth_middleware_1.authenticate, (0, controller_helper_1.createController)(null, auth_service_1.searchUsersService, 'SearchUsersController'));
+exports.default = authRouter;
